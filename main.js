@@ -1,3 +1,11 @@
+// Ricreiamo un feed social aggiungendo al layout di base fornito, il nostro javascript in cui:
+// - Creiamo il nostro array di oggetti che rappresentano ciascun post.
+// Ogni post dovrà avere le informazioni necessarie per stampare la relativa card: nome autore, foto profilo, data, testo del post, immagine (non tutti i post devono avere una immagine), numero di likes.
+// Per le immagini va bene utilizzare qualsiasi servizio di placeholder ad es. Unsplash (https://unsplash.it/300/300?image=<id>) - Prendendo come riferimento il layout di esempio presente nell'html, stampiamo i post del nostro feed. - Rendiamo il tasto "Mi Piace" cliccabile con incremento del counter dei like
+// Formattare le date in formato italiano (gg/mm/aaaa)
+// Gestire l'assenza dell'immagine profilo con un elemento di fallback che contiene le iniziali dell'utente (es. Luca Formicola > LF).
+// Al click su un pulsante "Mi Piace" di un post, incrementare il contatore di like al post e cambiare colore al testo del bottone.
+
 const posts = [
     {
         "id": 1,
@@ -55,3 +63,65 @@ const posts = [
         "created": "2021-03-05"
     }
 ];
+
+// ciclo for di inserimento post nell'html tanti quanti sono i dati in nostro possesso
+for(let i = 0; i < posts.length; i++) {
+    const {id, content, media, author, likes, created} = posts[i];
+    // console.log(id, content, media, author, likes, created);
+    const {name, image} = author;
+    // console.log(name, image);
+    
+    // creo l'elemento div esterno con classe post
+    const post = document.createElement('div');
+    post.classList.add('post');
+
+    // creo l'elemento div con classe post__header aggiungendo contenuto html inserendo i dati dell'array oggetti posts 
+    const postHeader = document.createElement('div');
+    postHeader.classList.add('post__header');
+    postHeader.innerHTML = `
+        <div class="post-meta">                    
+            <div class="post-meta__icon">
+                <img class="profile-pic" src="${image}" alt="${name}">                    
+            </div>
+            <div class="post-meta__data">
+                <div class="post-meta__author">${name}</div>
+                <div class="post-meta__time">${created}</div>
+            </div>                    
+        </div>
+    `;
+
+    // creo l'elemento div con classe post__text aggiungendo contenuto html inserendo il dato dell'array oggetti posts 
+    const postText = document.createElement('div');
+    postText.classList.add('post__text');
+    postText.innerHTML = `${content}`;
+
+    // creo l'elemento div con classe post__image aggiungendo contenuto html inserendo il dato dell'array oggetti posts 
+    const postImage = document.createElement('div');
+    postImage.classList.add('post__image');
+    postImage.innerHTML = `<img src="${media}" alt="">`;
+
+    // creo l'elemento div con classe post__footer aggiungendo contenuto html inserendo i dati dell'array oggetti posts
+    const postFooter = document.createElement('div');
+    postFooter.classList.add('post__footer');
+    postFooter.innerHTML = `
+        <div class="likes js-likes">
+            <div class="likes__cta">
+                <a class="like-button  js-like-button" href="#" data-postid="1">
+                    <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
+                    <span class="like-button__label">Mi Piace</span>
+                </a>
+            </div>
+            <div class="likes__counter">
+                Piace a <b id="like-counter-${id}" class="js-likes-counter">${likes}</b> persone
+            </div>
+        </div>
+    `;
+
+    // appendo i div creati (con classe post__header, post__text, post__image, post__footer) all'interno del div con classe post, pormando la struttura completa del singolo post del nostro sito
+    post.append(postHeader, postText, postImage, postFooter);
+    
+    // infine appendo la struttura post all'interno del nostro container
+    const container = document.getElementById('container');
+    container.append(post);
+}
+
