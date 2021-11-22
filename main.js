@@ -1,11 +1,3 @@
-// Ricreiamo un feed social aggiungendo al layout di base fornito, il nostro javascript in cui:
-// - Creiamo il nostro array di oggetti che rappresentano ciascun post.
-// Ogni post dovrà avere le informazioni necessarie per stampare la relativa card: nome autore, foto profilo, data, testo del post, immagine (non tutti i post devono avere una immagine), numero di likes.
-// Per le immagini va bene utilizzare qualsiasi servizio di placeholder ad es. Unsplash (https://unsplash.it/300/300?image=<id>) - Prendendo come riferimento il layout di esempio presente nell'html, stampiamo i post del nostro feed. - Rendiamo il tasto "Mi Piace" cliccabile con incremento del counter dei like
-// Formattare le date in formato italiano (gg/mm/aaaa)
-// Gestire l'assenza dell'immagine profilo con un elemento di fallback che contiene le iniziali dell'utente (es. Luca Formicola > LF).
-// Al click su un pulsante "Mi Piace" di un post, incrementare il contatore di like al post e cambiare colore al testo del bottone.
-
 const posts = [
     {
         "id": 1,
@@ -76,28 +68,29 @@ for(let i = 0; i < posts.length; i++) {
     const container = document.getElementById('container');
     container.append(post);
 
+    // funzionalità al click del pulsante "mi piace"
     const likeButton = document.querySelector(`a[data-postid="${id}"]`);
     likeButton.addEventListener("click",
         function(event) {
+            // rimuovo gli eventi di default dal pulsante in quanto un <a> con href
             event.preventDefault();
-            // console.log('funziona');
 
+            // verifico se il bottone tag di riferimento abbia la classe che definisce l'aver messo mi piace al post e assegno a likes il numero di mi piace al post
             const isLiked = likeButton.classList.contains('like-button--liked');
-            // console.log(isLiked);
-            // console.log(likeButton);
-
             let likes = parseInt(document.getElementById(`like-counter-${id}`).innerHTML);
-            console.log(likes);
 
             if(isLiked) {
-                // console.log('inserita');
+                // se abbiamo gia messo mi piace alla pagina rimuovo il like rimuovendo la classe e decremento i likes al post di uno ( quello inserito dall'utente stesso )
                 likeButton.classList.remove('like-button--liked');
                 likes--;
+                
             } else {
-                // console.log('non inserita');
+                // altrimenti se non abbiamo messo mi piace alla pagina aggiungo il like con la classe e aumento i likes al post di uno ( quello inserito dall'utente stesso )
                 likeButton.classList.add('like-button--liked');
                 likes++;
+
             }
+            // infine stampo i likes al post dopo il click
             document.getElementById(`like-counter-${id}`).innerHTML = likes;
         }
     );
@@ -108,19 +101,20 @@ for(let i = 0; i < posts.length; i++) {
 
 // Funzione per definire e ritornare l'elemento div con classe post con passaggio di parametri variabili
 function createPost(id, content, media, likes, created, name, image) {
+    // modifico il formato della data in un formato italiano (dd/mm/yyyy) 
+    const data = new Date(created);
+    created = data.getDate() + '-' + (data.getMonth() + 1) + '-' + data.getFullYear();
+
     // creo l'elemento div esterno con classe post
     const post = document.createElement('div');
     post.classList.add('post');
 
-    // console.log(created);
-    const data = new Date(created);
-    // console.log(data);
-    created = data.getDate() + '-' + (data.getMonth() + 1) + '-' + data.getFullYear()
-    console.log(created);
     // creo l'elemento div con classe post__header aggiungendo contenuto html inserendo i dati dell'array oggetti posts 
     const postHeader = document.createElement('div');
     postHeader.classList.add('post__header');
+    
     if(image != null) {
+        // se tra i dati del post è presente l'immagine allora inserisco il contenuto con l'immagine
         postHeader.innerHTML = `
             <div class="post-meta">                    
                 <div class="post-meta__icon">
@@ -133,14 +127,9 @@ function createPost(id, content, media, likes, created, name, image) {
             </div>
         `;
     } else {
-        // console.log(name);
-        const nameArray = name.split(" ");
-        // console.log(nameArray);
-        let acronym = '';
-        for(let i = 0; i < nameArray.length; i++) {
-            acronym += nameArray[i].charAt(0);
-        }
-        // console.log(acronym);
+        // altrimenti se non presente richiamo la funzione per creare l'acronimo in una costante ed inserisco il contenuto
+        const acronym = getAcronym(name);
+        
         postHeader.innerHTML = `
             <div class="post-meta">                    
                 <div class="post-meta__icon">
@@ -188,4 +177,15 @@ function createPost(id, content, media, likes, created, name, image) {
 
     return post;
 }
+
+// funzione che mi restituisce l'acronimo di un dato testo
+function getAcronym(text) {
+    const nameArray = text.split(" ");
+    let acronym = '';
+    for(let i = 0; i < nameArray.length; i++) {
+        acronym += nameArray[i].charAt(0);
+    }   
+
+    return acronym;
+} 
 
