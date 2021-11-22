@@ -67,61 +67,70 @@ const posts = [
 // ciclo for di inserimento post nell'html tanti quanti sono i dati in nostro possesso
 for(let i = 0; i < posts.length; i++) {
     const {id, content, media, author, likes, created} = posts[i];
-    // console.log(id, content, media, author, likes, created);
     const {name, image} = author;
-    // console.log(name, image);
     
-    // creo l'elemento div esterno con classe post
-    const post = document.createElement('div');
-    post.classList.add('post');
-
-    // creo l'elemento div con classe post__header aggiungendo contenuto html inserendo i dati dell'array oggetti posts 
-    const postHeader = document.createElement('div');
-    postHeader.classList.add('post__header');
-    postHeader.innerHTML = `
-        <div class="post-meta">                    
-            <div class="post-meta__icon">
-                <img class="profile-pic" src="${image}" alt="${name}">                    
-            </div>
-            <div class="post-meta__data">
-                <div class="post-meta__author">${name}</div>
-                <div class="post-meta__time">${created}</div>
-            </div>                    
-        </div>
-    `;
-
-    // creo l'elemento div con classe post__text aggiungendo contenuto html inserendo il dato dell'array oggetti posts 
-    const postText = document.createElement('div');
-    postText.classList.add('post__text');
-    postText.innerHTML = `${content}`;
-
-    // creo l'elemento div con classe post__image aggiungendo contenuto html inserendo il dato dell'array oggetti posts 
-    const postImage = document.createElement('div');
-    postImage.classList.add('post__image');
-    postImage.innerHTML = `<img src="${media}" alt="">`;
-
-    // creo l'elemento div con classe post__footer aggiungendo contenuto html inserendo i dati dell'array oggetti posts
-    const postFooter = document.createElement('div');
-    postFooter.classList.add('post__footer');
-    postFooter.innerHTML = `
-        <div class="likes js-likes">
-            <div class="likes__cta">
-                <a class="like-button  js-like-button" href="#" data-postid="1">
-                    <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
-                    <span class="like-button__label">Mi Piace</span>
-                </a>
-            </div>
-            <div class="likes__counter">
-                Piace a <b id="like-counter-${id}" class="js-likes-counter">${likes}</b> persone
-            </div>
-        </div>
-    `;
-
-    // appendo i div creati (con classe post__header, post__text, post__image, post__footer) all'interno del div con classe post, pormando la struttura completa del singolo post del nostro sito
-    post.append(postHeader, postText, postImage, postFooter);
+    // assegno a post il div creato dalla funzione createPost
+    const post = createPost(id, content, media, likes, created, name, image);
     
     // infine appendo la struttura post all'interno del nostro container
     const container = document.getElementById('container');
     container.append(post);
+}
+
+
+// **********Funzioni
+
+// Funzione per definire e ritornare l'elemento div con classe post con passaggio di parametri variabili
+function createPost(id, content, media, likes, created, name, image) {
+    // creo l'elemento div esterno con classe post
+   const post = document.createElement('div');
+   post.classList.add('post');
+
+   // creo l'elemento div con classe post__header aggiungendo contenuto html inserendo i dati dell'array oggetti posts 
+   const postHeader = document.createElement('div');
+   postHeader.classList.add('post__header');
+   postHeader.innerHTML = `
+       <div class="post-meta">                    
+           <div class="post-meta__icon">
+               <img class="profile-pic" src="${image}" alt="${name}">                    
+           </div>
+           <div class="post-meta__data">
+               <div class="post-meta__author">${name}</div>
+               <div class="post-meta__time">${created}</div>
+           </div>                    
+       </div>
+   `;
+
+   // creo l'elemento div con classe post__text aggiungendo contenuto html inserendo il dato dell'array oggetti posts 
+   const postText = document.createElement('div');
+   postText.classList.add('post__text');
+   postText.innerHTML = `${content}`;
+
+   // creo l'elemento div con classe post__image aggiungendo contenuto html inserendo il dato dell'array oggetti posts 
+   const postImage = document.createElement('div');
+   postImage.classList.add('post__image');
+   postImage.innerHTML = `<img src="${media}" alt="">`;
+
+   // creo l'elemento div con classe post__footer aggiungendo contenuto html inserendo i dati dell'array oggetti posts
+   const postFooter = document.createElement('div');
+   postFooter.classList.add('post__footer');
+   postFooter.innerHTML = `
+       <div class="likes js-likes">
+           <div class="likes__cta">
+               <a class="like-button  js-like-button" href="#" data-postid="1">
+                   <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
+                   <span class="like-button__label">Mi Piace</span>
+               </a>
+           </div>
+           <div class="likes__counter">
+               Piace a <b id="like-counter-${id}" class="js-likes-counter">${likes}</b> persone
+           </div>
+       </div>
+   `;
+
+   // appendo i div creati (con classe post__header, post__text, post__image, post__footer) all'interno del div con classe post, pormando la struttura completa del singolo post del nostro sito
+   post.append(postHeader, postText, postImage, postFooter);
+
+   return post;
 }
 
