@@ -112,19 +112,11 @@ function createPost(id, content, media, likes, created, name, image) {
     const post = document.createElement('div');
     post.classList.add('post');
 
-    //console.log(created);
-    const dateArray = created.split('-');
-    //console.log(dateArray);
-    let createdIt = '';
-    for(let i = dateArray.length - 1; i >= 0; i--) {
-        if (i > 0) {
-            createdIt += dateArray[i] + '-';
-        } else {
-            createdIt += dateArray[i];
-        }
-    }
-    // console.log(createdIt);
-    
+    // console.log(created);
+    const data = new Date(created);
+    // console.log(data);
+    created = data.getDate() + '-' + (data.getMonth() + 1) + '-' + data.getFullYear()
+    console.log(created);
     // creo l'elemento div con classe post__header aggiungendo contenuto html inserendo i dati dell'array oggetti posts 
     const postHeader = document.createElement('div');
     postHeader.classList.add('post__header');
@@ -136,7 +128,7 @@ function createPost(id, content, media, likes, created, name, image) {
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${name}</div>
-                    <div class="post-meta__time">${createdIt}</div>
+                    <div class="post-meta__time">${created}</div>
                 </div>                    
             </div>
         `;
@@ -158,7 +150,7 @@ function createPost(id, content, media, likes, created, name, image) {
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${name}</div>
-                    <div class="post-meta__time">${createdIt}</div>
+                    <div class="post-meta__time">${created}</div>
                 </div>                    
             </div>
         `;
