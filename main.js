@@ -68,7 +68,7 @@ const posts = [
 for(let i = 0; i < posts.length; i++) {
     const {id, content, media, author, likes, created} = posts[i];
     const {name, image} = author;
-
+    
     // assegno a post il div creato dalla funzione createPost
     const post = createPost(id, content, media, likes, created, name, image);
     
@@ -115,17 +115,41 @@ function createPost(id, content, media, likes, created, name, image) {
    // creo l'elemento div con classe post__header aggiungendo contenuto html inserendo i dati dell'array oggetti posts 
    const postHeader = document.createElement('div');
    postHeader.classList.add('post__header');
-   postHeader.innerHTML = `
-       <div class="post-meta">                    
-           <div class="post-meta__icon">
-               <img class="profile-pic" src="${image}" alt="${name}">                    
-           </div>
-           <div class="post-meta__data">
-               <div class="post-meta__author">${name}</div>
-               <div class="post-meta__time">${created}</div>
-           </div>                    
-       </div>
-   `;
+   if(image != null) {
+    postHeader.innerHTML = `
+        <div class="post-meta">                    
+            <div class="post-meta__icon">
+                <img class="profile-pic" src="${image}" alt="${name}">                    
+            </div>
+            <div class="post-meta__data">
+                <div class="post-meta__author">${name}</div>
+                <div class="post-meta__time">${created}</div>
+            </div>                    
+        </div>
+    `;
+   } else {
+    // console.log(name);
+    const nameArray = name.split(" ");
+    // console.log(nameArray);
+    let acronym = '';
+    for(let i = 0; i < nameArray.length; i++) {
+        acronym += nameArray[i].charAt(0);
+    }
+    // console.log(acronym);
+    postHeader.innerHTML = `
+        <div class="post-meta">                    
+            <div class="post-meta__icon">
+                <div class ="profile-pic-default">
+                    <span>${acronym}</span>
+                </div>                   
+            </div>
+            <div class="post-meta__data">
+                <div class="post-meta__author">${name}</div>
+                <div class="post-meta__time">${created}</div>
+            </div>                    
+        </div>
+    `;
+   }
 
    // creo l'elemento div con classe post__text aggiungendo contenuto html inserendo il dato dell'array oggetti posts 
    const postText = document.createElement('div');
