@@ -68,13 +68,39 @@ const posts = [
 for(let i = 0; i < posts.length; i++) {
     const {id, content, media, author, likes, created} = posts[i];
     const {name, image} = author;
-    
+
     // assegno a post il div creato dalla funzione createPost
     const post = createPost(id, content, media, likes, created, name, image);
     
     // infine appendo la struttura post all'interno del nostro container
     const container = document.getElementById('container');
     container.append(post);
+
+    const likeButton = document.querySelector(`a[data-postid="${id}"]`);
+    likeButton.addEventListener("click",
+        function(event) {
+            event.preventDefault();
+            // console.log('funziona');
+
+            const isLiked = likeButton.classList.contains('like-button--liked');
+            // console.log(isLiked);
+            // console.log(likeButton);
+
+            let likes = parseInt(document.getElementById(`like-counter-${id}`).innerHTML);
+            console.log(likes);
+
+            if(isLiked) {
+                // console.log('inserita');
+                likeButton.classList.remove('like-button--liked');
+                likes--;
+            } else {
+                // console.log('non inserita');
+                likeButton.classList.add('like-button--liked');
+                likes++;
+            }
+            document.getElementById(`like-counter-${id}`).innerHTML = likes;
+        }
+    );
 }
 
 
@@ -117,7 +143,7 @@ function createPost(id, content, media, likes, created, name, image) {
    postFooter.innerHTML = `
        <div class="likes js-likes">
            <div class="likes__cta">
-               <a class="like-button  js-like-button" href="#" data-postid="1">
+               <a class="like-button  js-like-button" href="#" data-postid="${id}">
                    <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                    <span class="like-button__label">Mi Piace</span>
                </a>
